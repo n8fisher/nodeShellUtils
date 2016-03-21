@@ -4,15 +4,8 @@ require('./helper')
 
 let _ = require('lodash');
 let fs = require('fs').promise
-let path = require('path')
 let co = require('co')
-let recursive =false
 let dir = process.argv[2]
-
-if (process.argv[2] == '-R'){
-	recursive=true
-	dir=process.argv[3]
-}
 
 let startDir =process.cwd()
 

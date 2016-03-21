@@ -2,18 +2,20 @@
 
 require('./helper')
 let fs = require('fs').promise
+let co = require('co')
+
 
 let touch =  co.wrap(function*  (){
  	//If file exists update mtime
   	let file = process.argv[2]
-  	let exists =  yield fs.access(file,fs.F_OK, (err,stats)=>{
+  	let exists =  yield fs.access(file,fs.F_OK, function* (err,stats){
   				if(err){
-  					fs.writeFile(process.argv[2],'', (err) => {
+  					fs.writeFile(process.argv[2],'', function* (err) {
   						console.log(err)
-					});
+					})
   				}else
   				{
-  					fs.open(file,'r', (err,fd) =>{
+  					let f  = yield fs.open(file,'r', (err,fd) =>{
 			   			if (!Date.now) {
 		  					Date.now = function() { return new Date().getTime(); }
 			 			}
@@ -25,10 +27,10 @@ let touch =  co.wrap(function*  (){
 						})
 					})
   				}
-  	})
+	})
+})
 	
-}
-let touch = co.warap(touch)
+touch = co.wrap(touch)
 function * main(){
 	let touched = yield touch()
 }

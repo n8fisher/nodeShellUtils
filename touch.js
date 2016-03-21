@@ -3,7 +3,7 @@
 require('./helper')
 let fs = require('fs').promise
 
-function* touch (){
+let touch =  co.wrap(function*  (){
  	//If file exists update mtime
   	let file = process.argv[2]
   	let exists =  yield fs.access(file,fs.F_OK, (err,stats)=>{
@@ -28,5 +28,9 @@ function* touch (){
   	})
 	
 }
+let touch = co.warap(touch)
+function * main(){
+	let touched = yield touch()
+}
 
-module.exports = touch
+module.exports = main

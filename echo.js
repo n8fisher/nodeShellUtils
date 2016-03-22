@@ -1,12 +1,15 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --use_strict
 
 require('./helper')
 let fs = require('fs').promise
 
+
 function* echo() {
-    // Use 'yield' in here
-    // Your implementation here
-    console.log(yield fs.readFile(__filename, console.log))
+		//Let's get only the third element to the end of the array
+		//...then print with space seperators
+		//As a note, this has several issues. For example whitespace is not preserved
+		//http://stackoverflow.com/questions/24874084/getting-raw-command-line-arguments-in-node-js
+       console.log(process.argv.slice(2,process.argv.length).join(' '))
 }
 
 module.exports = echo

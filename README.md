@@ -16,4 +16,4 @@ Completed:
 
 Walkthrough Gif:
 
-![Video Walkthrough](Walkthrough.gif)
+![Video Walkthrough](WalkThrough.gif)

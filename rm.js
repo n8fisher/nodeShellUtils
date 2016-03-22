@@ -7,17 +7,9 @@ let _ = require('lodash');
 let fs = require('fs').promise
 let path = require('path')
 let co = require('co')
-let recursive =false
 let dir = process.argv[2]
 
-if (process.argv[2] == '-r'){
-	recursive=true
-	dir=process.argv[3]
-}
 
-var deleteFolderRecursive = function(path) {
-  
-};
 
 let rm = co.wrap(function*  (rootPath) {
 	let stat = yield fs.stat(rootPath)

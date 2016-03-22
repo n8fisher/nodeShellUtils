@@ -5,29 +5,40 @@ let fs = require('fs').promise
 let co = require('co')
 
 
+
+
 let touch =  co.wrap(function*  (){
  	//If file exists update mtime
   	let file = process.argv[2]
-  	let exists =  yield fs.access(file,fs.F_OK, function* (err,stats){
-  				if(err){
-  					fs.writeFile(process.argv[2],'', function* (err) {
-  						console.log(err)
-					})
-  				}else
-  				{
-  					let f  = yield fs.open(file,'r', (err,fd) =>{
-			   			if (!Date.now) {
-		  					Date.now = function() { return new Date().getTime(); }
-			 			}
-						fs.futimes(fd, Date.now, Date.now, (err)=>{
-							console.log(err)
-						})
-						fs.close(fd,(err) =>{
-							console.log(err)
-						})
-					})
-  				}
+  	let exists = false
+  	try{
+		exists = yield fs.access(path, fs.F_OK)	
+	}catch(ex){
+		exists=false
+	}
+	let fd = 0
+  	if(exists){
+  		let stat =  yield fs.stat(file)
+  		if(stat.isDirectory){
+  			return 
+  		}else{
+  			fd  = yield fs.open(file,'r')
+  		}
+  	}else{
+  		fd  = yield fs.open(file,'w')
+  	}
+	
+	fs.futimes(fd, new Date().getTime(), new Date().getTime(), (err)=>{
+		if(err){
+			console.log(err)
+		}
 	})
+	fs.close(fd,(err) =>{
+		if(err){
+			console.log(err)
+		}
+	})
+	
 })
 	
 touch = co.wrap(touch)
